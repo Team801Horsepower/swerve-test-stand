@@ -17,13 +17,13 @@ import frc.robot.utilities.Utils;
 /**
  * Add your docs here.
  */
-public class Stand extends Subsystem 
+public class Stand extends Subsystem
 {
-    
+
     private SwervePod pod = new SwervePod(Constants.DRIVE_POD_ID, Constants.TURN_POD_ID, 0);
 
     @Override
-    public void initDefaultCommand() 
+    public void initDefaultCommand()
     {
         setDefaultCommand(new JoystickDrive());
     }
@@ -46,29 +46,29 @@ public class Stand extends Subsystem
         //System.out.println(theta);
         pod.setDesiredRPM(speed);
 
-        if(Robot.io.getButtonAPressed())
+        if (Robot.io.getButtonAPressed())
         {
           pod.setDesiredAngle(Math.PI/6);
         }
 
-        if(Robot.io.getButtonBPressed())
+        if (Robot.io.getButtonBPressed())
         {
           pod.setDesiredAngle(Math.PI);
         }
 
-        if(Robot.io.getButtonXPressed())
+        if (Robot.io.getButtonXPressed())
         {
           pod.setDesiredAngle(Math.PI/2);
         }
 
-        
-        if(Robot.io.getButtonYPressed())
+
+        if (Robot.io.getButtonYPressed())
         {
           pod.setDesiredAngle(0);
         }
     }
 
-    
+
     public double getAngle()
     {
         return pod.getCurrentAngle();

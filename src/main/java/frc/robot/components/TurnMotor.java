@@ -28,7 +28,7 @@ public class TurnMotor
   public TurnMotor(int motorID, int motorIndex)
   {
       sparkMotor = new CANSparkMax(motorID, MotorType.kBrushless);
-      
+
       sparkEncoder = sparkMotor.getEncoder(EncoderType.kHallSensor, 42);
       // sparkEncoder = sparkMotor.getEncoder(EncoderType.kQuadrature, 4096 * 6);
       // sparkEncoder = sparkMotor.getEncoder(EncoderType.kQuadrature, 8192 * 6);
@@ -43,13 +43,13 @@ public class TurnMotor
 
       // create and initialize the PID for the heading
       anglePID = new PID(Constants.TURN_P, Constants.TURN_I, Constants.TURN_D);
-      
+
       // get the initial error
       AngleProcessing();
-      
+
       // set initial desired heading to the current actual heading.
       desiredAngle = currentAngle;
-      
+
       // initially setup the PID parameters
       anglePID.setOutputLimits(Constants.OutputLowLimit, Constants.OutputHighLimit);
       anglePID.setMaxIOutput(Constants.MaxIOutput);
@@ -63,7 +63,7 @@ public class TurnMotor
       //System.out.printf("desiredAngle: , currentAngle: %.4f , %.4f , %.4f  \n", desiredAngle, currentAngle, vTheta);
 
   }
-  
+
   // process loop, called every execution cycle
   public void processTurn()
   {
@@ -82,40 +82,40 @@ public class TurnMotor
   {
       return this.currentAngle;
   }
- 
+
 
   // takes -PI to PI and processes the output to the motor controller.
   // This must be called repeatedly in the main robot loop.
   public void setDesiredAngle(double angle)
   {
     // convert to always positive angle between 0 and 2PI
-    if(angle < 0)
-    { 
-      angle = angle + (2 * Math.PI); 
+    if (angle < 0)
+    {
+      angle = angle + (2 * Math.PI);
     }
- 
+
     this.desiredAngle = angle;
-  } 
+  }
 
 
   // grab the current wheel angel and crunch out the value needed to correct to desired angle.
   // This method produces the angle input component to the motor from the PID that holds the
   // desired angle.  The error from the PID is sent to the motors in the vTheta variable.
-  private void AngleProcessing() 
+  private void AngleProcessing()
   {
      // fetch the encoder ( +/- 1 = 1 rotation )
-     // mod div to get number between (-2PI and 2PI) 
-      currentAngle = sparkEncoder.getPosition() % (2 * Math.PI); 
-      
+     // mod div to get number between (-2PI and 2PI)
+      currentAngle = sparkEncoder.getPosition() % (2 * Math.PI);
+
       // always keep in terms of positive angle 0 to 2PI
-      if(currentAngle < 0) 
+      if (currentAngle < 0)
       {
-          currentAngle = currentAngle + (2 * Math.PI); 
-      }    
+          currentAngle = currentAngle + (2 * Math.PI);
+      }
 
       vTheta = anglePID.getOutput(currentAngle, desiredAngle);
   }
-  
+
   public void zeroEncoder()
   {
     sparkEncoder.setPosition(0.0);
