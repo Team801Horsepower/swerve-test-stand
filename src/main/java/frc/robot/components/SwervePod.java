@@ -7,9 +7,6 @@ public class SwervePod
     private TurnMotor turnMotor;
     private double lastDesiredAngle;
 
-    // In order to stear the least,
-    private boolean flipFlag = false;   // keeps track of the current 'forwad' direction
-
     public SwervePod(int driveMotorID, int turnMotorID, int podIndex)
     {
         driveMotor = new DriveMotor(driveMotorID, podIndex);
@@ -25,14 +22,7 @@ public class SwervePod
 
     public void setDesiredRPM(double speed)
     {
-        if (flipFlag)
-        {
-            driveMotor.setDesiredRPM(-speed);
-        }
-        else
-        {
-            driveMotor.setDesiredRPM(speed);
-        }
+        driveMotor.setDesiredRPM(speed);
     }
 
     public void setDesiredAngle(double desiredAngle)
@@ -44,28 +34,7 @@ public class SwervePod
         double errorAngle = Math.abs(desiredAngle - lastDesiredAngle);
         lastDesiredAngle = desiredAngle;
 
-        // toggle the flip flag if angle is 90 out.
-        if (errorAngle > Math.PI/2 && errorAngle < 3 * Math.PI/2 )
-        {
-            if (flipFlag)
-            {
-                flipFlag = false;
-            }
-            else
-            {
-                flipFlag = true;
-            }
-        }
-
-        if (flipFlag)
-        {
-            double tempAngle = ( desiredAngle + Math.PI ) % (2 * Math.PI);
-            turnMotor.setDesiredAngle(tempAngle);
-        }
-        else
-        {
-            turnMotor.setDesiredAngle(desiredAngle);
-        }
+        turnMotor.setDesiredAngle(desiredAngle);
     }
 
     public double getCurrentRPM()

@@ -88,11 +88,7 @@ public class TurnMotor
   // This must be called repeatedly in the main robot loop.
   public void setDesiredAngle(double angle)
   {
-    // convert to always positive angle between 0 and 2PI
-    if (angle < 0)
-    {
-      angle = angle + (2 * Math.PI);
-    }
+    angle = Utils.normalizeAngle(angle);
 
     this.desiredAngle = angle;
   }

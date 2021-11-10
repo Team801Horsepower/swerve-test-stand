@@ -35,7 +35,10 @@ public class Stand extends Subsystem
 
 
       //double x = Robot.m_oi.getDriverX();
-        double speed = Utils.magnitude(Robot.io.getDriverLeftX(), Robot.io.getDriverLeftY());
+        double x = Robot.io.getDriverLeftX();
+        double y = Robot.io.getDriverLeftY();
+
+        double speed = Utils.magnitude(x, y);
 
 
        // double theta = Utils.angle(Robot.io.getDriverLeftX(), Robot.io.getDriverLeftY());
@@ -46,26 +49,9 @@ public class Stand extends Subsystem
         //System.out.println(theta);
         pod.setDesiredRPM(speed);
 
-        if (Robot.io.getButtonAPressed())
-        {
-          pod.setDesiredAngle(Math.PI/6);
-        }
+        double angle = Math.atan2(y, x);
 
-        if (Robot.io.getButtonBPressed())
-        {
-          pod.setDesiredAngle(Math.PI);
-        }
-
-        if (Robot.io.getButtonXPressed())
-        {
-          pod.setDesiredAngle(Math.PI/2);
-        }
-
-
-        if (Robot.io.getButtonYPressed())
-        {
-          pod.setDesiredAngle(0);
-        }
+        pod.setDesiredAngle(angle);
     }
 
 
