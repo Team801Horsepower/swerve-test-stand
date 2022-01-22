@@ -1,8 +1,8 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved. */
+/* Open Source Software - may be modified and shared by FRC teams. The code */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
+/* the project. */
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
@@ -13,41 +13,36 @@ import edu.wpi.first.wpilibj.Joystick;
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class IO 
-{
+public class IO {
 
     public static Joystick driver = new Joystick(0);
 
     /**
      * @return the horizontal axis value from the left driver controller
      */
-    public double getDriverLeftX()
-    {
+    public double getDriverLeftX() {
         return deadbandFilter(driver.getX(), 0.08);
     }
 
     /**
      * @return the vertical axis value from the left joystick on the driver controller
      */
-    public double getDriverLeftY()
-    {
+    public double getDriverLeftY() {
         return deadbandFilter(driver.getY(), 0.05);
     }
 
     /**
      * @return the horizontal axis value from the right joystick on the driver controller
      */
-    public double getDriverRightX()
-    {
-        return deadbandFilter(driver.getRawAxis(4), 0.05); 
+    public double getDriverRightX() {
+        return deadbandFilter(driver.getRawAxis(4), 0.05);
     }
 
     /**
      * @return the vertical axis value from the right joystick on the driver controller
      */
-    public double getDriverRightY()
-    {
-        return deadbandFilter(driver.getRawAxis(5), 0.05); 
+    public double getDriverRightY() {
+        return deadbandFilter(driver.getRawAxis(5), 0.05);
     }
 
 
@@ -55,8 +50,7 @@ public class IO
      * Reads the driver controller first joystick's horizontal value and applies an exponential function based on the exponent provided
      * @param exponent determines how steep the exponential function is
      */
-    public double getDriverExpoLeftX(double exponent)
-    {
+    public double getDriverExpoLeftX(double exponent) {
         return getExponential(getDriverLeftX(), exponent);
     }
 
@@ -64,8 +58,7 @@ public class IO
      * Reads the driver controller first joystick's vertical value and applies an exponential function based on the exponent provided
      * @param exponent determines how steep the exponential function is
      */
-    public double getDriverExpoLeftY(double exponent)
-    {
+    public double getDriverExpoLeftY(double exponent) {
         return getExponential(getDriverLeftY(), exponent);
     }
 
@@ -73,8 +66,7 @@ public class IO
      * Reads the driver controller second joystick's horizontal value and applies an exponential function based on the exponent provided
      * @param exponent determines how steep the exponential function is
      */
-    public double getDriverExpoRightX(double exponent)
-    {
+    public double getDriverExpoRightX(double exponent) {
         return getExponential(getDriverRightX(), exponent);
     }
 
@@ -82,34 +74,28 @@ public class IO
      * Reads the driver controller second joystick's vertical value and applies an exponential function based on the exponent provided
      * @param exponent determines how steep the exponential function is
      */
-    public double getDriverExpoRightY(double exponent)
-    {
+    public double getDriverExpoRightY(double exponent) {
         return getExponential(getDriverRightY(), exponent);
     }
-    
-    private double deadbandFilter(double value, double deadband)
-    {
+
+    private double deadbandFilter(double value, double deadband) {
         return Math.abs(value) > deadband ? value : 0;
     }
 
 
-    public boolean getButtonAPressed()
-    {
+    public boolean getButtonAPressed() {
         return driver.getRawButton(1);
     }
 
-    public boolean getButtonBPressed()
-    {
+    public boolean getButtonBPressed() {
         return driver.getRawButton(2);
     }
-    
-    public boolean getButtonXPressed()
-    {
+
+    public boolean getButtonXPressed() {
         return driver.getRawButton(3);
     }
 
-    public boolean getButtonYPressed()
-    {
+    public boolean getButtonYPressed() {
         return driver.getRawButton(4);
     }
 
@@ -117,8 +103,7 @@ public class IO
     /**
      * This function takes a joystick input and applies an exponential scaling
      */
-    private double getExponential(double stickInput, double exponent)
-    {
+    private double getExponential(double stickInput, double exponent) {
         double stickOutput;
 
         // stickOutput = e^(exponent*|stickInput|) - 1

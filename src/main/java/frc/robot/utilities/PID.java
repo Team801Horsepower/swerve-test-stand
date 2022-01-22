@@ -1,38 +1,37 @@
 package frc.robot.utilities;
 
-public class PID
-{
+public class PID {
   //**********************************
   // Class private variables
   //**********************************
 
-  private double P=0;
-  private double I=0;
-  private double D=0;
-  private double F=0;
+  private double P = 0;
+  private double I = 0;
+  private double D = 0;
+  private double F = 0;
 
-  private double maxIOutput=1;
-  private double maxError=0;
-  private double errorSum=0;
+  private double maxIOutput = 1;
+  private double maxError = 0;
+  private double errorSum = 0;
 
-  private double maxOutput=0;
-  private double minOutput=0;
+  private double maxOutput = 0;
+  private double minOutput = 0;
 
-  private double setpoint=0;
+  private double setpoint = 0;
 
-  private double lastActual=0;
+  private double lastActual = 0;
 
-  private boolean firstRun=true;
-  private boolean reversed=false;
+  private boolean firstRun = true;
+  private boolean reversed = false;
 
-  private double outputRampRate=0;
-  private double lastOutput=0;
+  private double outputRampRate = 0;
+  private double lastOutput = 0;
 
-  private double outputFilter=0;
+  private double outputFilter = 0;
 
-  private double setpointRangeLo=0;
-  private double setpointRangeHi=0;
-  private double continousInputRange=0;
+  private double setpointRangeLo = 0;
+  private double setpointRangeHi = 0;
+  private double continousInputRange = 0;
 
   private boolean continous;
   private double error;
@@ -48,9 +47,10 @@ public class PID
    * @param i Integral gain.
    * @param d Derivative gain. (keep small...)
    */
-  public PID(double p, double i, double d)
-  {
-    P=p; I=i; D=d;
+  public PID(double p, double i, double d) {
+    P = p;
+    I = i;
+    D = d;
     checkSigns();
   }
 
@@ -59,9 +59,11 @@ public class PID
    * Adds forward gain parameter, setF methods for more details.
    * @param f Feed-forward gain. Open loop anticipation of what the output should be. good with setpi
    */
-  public PID(double p, double i, double d, double f)
-  {
-    P=p; I=i; D=d; F=f;
+  public PID(double p, double i, double d, double f) {
+    P = p;
+    I = i;
+    D = d;
+    F = f;
     checkSigns();
   }
 
@@ -75,9 +77,8 @@ public class PID
    *
    * @param p Proportional gain. Affects output according to <b>output+=P*(setpoint-current_value)</b>
    */
-  public void setP(double p)
-  {
-    P=p;
+  public void setP(double p) {
+    P = p;
     checkSigns();
   }
 
@@ -91,17 +92,14 @@ public class PID
    *
    * @param i New gain value for the Integral term
    */
-  public void setI(double i)
-  {
-    if (I!=0)
-    {
-      errorSum=errorSum * I / i;
+  public void setI(double i) {
+    if (I != 0) {
+      errorSum = errorSum * I / i;
     }
-    if ( maxIOutput != 0 )
-    {
-      maxError=maxIOutput / i;
+    if (maxIOutput != 0) {
+      maxError = maxIOutput / i;
     }
-    I=i;
+    I = i;
     checkSigns();
   }
 
@@ -120,9 +118,8 @@ public class PID
    *
    * @param d New gain value for the Derivative term
    */
-  public void setD(double d)
-  {
-    D=d;
+  public void setD(double d) {
+    D = d;
     checkSigns();
   }
 
@@ -135,9 +132,8 @@ public class PID
    *
    * @param f Feed forward gain.
    */
-  public void setF(double f)
-  {
-    F=f;
+  public void setF(double f) {
+    F = f;
     checkSigns();
   }
 
@@ -148,9 +144,9 @@ public class PID
    * @param i Integral gain.  Becomes large if setpoint cannot reach target quickly.
    * @param d Derivative gain. Responds quickly to large changes in error. Small values prevents P and I terms from causing overshoot..
    */
-  public void setPID(double p, double i, double d)
-  {
-    P=p;D=d;
+  public void setPID(double p, double i, double d) {
+    P = p;
+    D = d;
     setI(i);
     checkSigns();
   }
@@ -163,9 +159,10 @@ public class PID
    * @param d Derivative gain. Responds quickly to large changes in error. Small values prevents P and I terms from causing overshoot.
    * @param f Feed-forward gain. Open loop "best guess" for the output should be. Only useful if setpoint represents a rate.
    */
-  public void setPID(double p, double i, double d, double f)
-  {
-    P=p;D=d;F=f;
+  public void setPID(double p, double i, double d, double f) {
+    P = p;
+    D = d;
+    F = f;
     setI(i);
     checkSigns();
   }
@@ -175,12 +172,10 @@ public class PID
    * This can be used to prevent large windup issues and make tuning simpler
    * @param maximum Units are the same as the expected output value
    */
-  public void setMaxIOutput(double maximum)
-  {
-    maxIOutput=maximum;
-    if (I!=0)
-    {
-      maxError=maxIOutput/I;
+  public void setMaxIOutput(double maximum) {
+    maxIOutput = maximum;
+    if (I != 0) {
+      maxError = maxIOutput / I;
     }
   }
 
@@ -190,8 +185,7 @@ public class PID
    * <b>[-output, output]</b>
    * @param output
    */
-  public void setOutputLimits(double output)
-  {
+  public void setOutputLimits(double output) {
     setOutputLimits(-output, output);
   }
 
@@ -202,16 +196,15 @@ public class PID
    * @param minimum possible output value
    * @param maximum possible output value
    */
-  public void setOutputLimits(double minimum, double maximum)
-  {
-    if (maximum<minimum)return;
-    maxOutput=maximum;
-    minOutput=minimum;
+  public void setOutputLimits(double minimum, double maximum) {
+    if (maximum < minimum)
+      return;
+    maxOutput = maximum;
+    minOutput = minimum;
 
     // Ensure the bounds of the I term are within the bounds of the allowable output swing
-    if (maxIOutput==0 || maxIOutput>(maximum-minimum) )
-    {
-      setMaxIOutput(maximum-minimum);
+    if (maxIOutput == 0 || maxIOutput > (maximum - minimum)) {
+      setMaxIOutput(maximum - minimum);
     }
   }
 
@@ -219,9 +212,8 @@ public class PID
    * Set the operating direction of the PID controller
    * @param reversed Set true to reverse PID output
    */
-  public void  setDirection(boolean reversed)
-  {
-    this.reversed=reversed;
+  public void setDirection(boolean reversed) {
+    this.reversed = reversed;
   }
 
   //**********************************
@@ -235,8 +227,7 @@ public class PID
    * @see PID getOutput(actual) <br>
    * @param setpoint
    */
-  public void setSetpoint(double setpoint )
-  {
+  public void setSetpoint(double setpoint) {
     this.setpoint = setpoint;
   }
 
@@ -246,8 +237,7 @@ public class PID
    * @param setpoint The target value for the system
    * @return calculated output value for driving the system
    */
-  public double getOutput(double actual, double setpoint )
-  {
+  public double getOutput(double actual, double setpoint) {
     double output;
     double Poutput;
     double Ioutput;
@@ -257,31 +247,25 @@ public class PID
     this.setpoint = setpoint;
 
     // Ramp the setpoint used for calculations if user has opted to do so
-    if (setpointRangeHi!=0 && setpointRangeLo!=0)
-    {
-      setpoint=constrain(setpoint, actual-setpointRangeLo, actual+setpointRangeHi);
+    if (setpointRangeHi != 0 && setpointRangeLo != 0) {
+      setpoint = constrain(setpoint, actual - setpointRangeLo, actual + setpointRangeHi);
     }
 
     // Do the simple parts of the calculations
-    error=setpoint-actual;
+    error = setpoint - actual;
 
     // use for heading or stuff that goes through a full rotation to make sure correction moves
     // the shortest distance, perhaps passing through the zero point.
     // Example: going from 10 -> 350 degrees
-    if (continous)
-    {
+    if (continous) {
       // clip the error in case it is greater than a full rotation
       error %= continousInputRange;
       // If the error is more than half the full rotation make it go the short distance by
       // changing the sign of the error by adding or subtracting one rotation.
-      if (Math.abs(error) > continousInputRange / 2)
-      {
-        if (error > 0)
-        {
+      if (Math.abs(error) > continousInputRange / 2) {
+        if (error > 0) {
           error -= continousInputRange;
-        }
-        else
-        {
+        } else {
           error += continousInputRange;
         }
       }
@@ -289,91 +273,76 @@ public class PID
 
 
     // Calculate F output. Notice, this depends only on the setpoint, and not the error.
-    Foutput = F*setpoint;
+    Foutput = F * setpoint;
 
     // Calculate P term
-    Poutput = P*error;
+    Poutput = P * error;
 
     // If this is our first time running this, we don't actually _have_ a previous input or output.
     // For sensor, sanely assume it was exactly where it is now.
     // For last output, we can assume it's the current time-independent outputs.
-    if (firstRun)
-    {
-      lastActual=actual;
-      lastOutput=Poutput+Foutput;
-      firstRun=false;
+    if (firstRun) {
+      lastActual = actual;
+      lastOutput = Poutput + Foutput;
+      firstRun = false;
     }
 
     // Calculate D Term
     // Note, this is negative. This actually "slows" the system if it's doing
     // the correct thing, and small values helps prevent output spikes and overshoot
 
-    if (continous)
-    {
-      if (Math.abs(actual-lastActual) > Math.PI)
-      {
-        if (actual > lastActual)
-        {
-          actual -= 2*Math.PI;
-        }
-        else
-        {
-          actual += 2*Math.PI;
+    if (continous) {
+      if (Math.abs(actual - lastActual) > Math.PI) {
+        if (actual > lastActual) {
+          actual -= 2 * Math.PI;
+        } else {
+          actual += 2 * Math.PI;
         }
       }
     }
 
-    Doutput = -D*(actual-lastActual);
+    Doutput = -D * (actual - lastActual);
     lastActual = actual;
 
     // The Iterm is more complex. There's several things to factor in to make it easier to deal with.
     // 1. maxIoutput restricts the amount of output contributed by the Iterm.
     // 2. prevent windup by not increasing errorSum if we're already running against our max Ioutput
     // 3. prevent windup by not increasing errorSum if output is output=maxOutput
-    Ioutput = I*errorSum;
-    if (maxIOutput!=0)
-    {
-      Ioutput=constrain(Ioutput, -maxIOutput, maxIOutput);
+    Ioutput = I * errorSum;
+    if (maxIOutput != 0) {
+      Ioutput = constrain(Ioutput, -maxIOutput, maxIOutput);
     }
 
     // And, finally, we can just add the terms up
-    output=Foutput + Poutput + Ioutput + Doutput;
+    output = Foutput + Poutput + Ioutput + Doutput;
 
     // Figure out what we're doing with the error.
-    if (minOutput!=maxOutput && !bounded(output, minOutput, maxOutput) )
-    {
-      errorSum=error;
+    if (minOutput != maxOutput && !bounded(output, minOutput, maxOutput)) {
+      errorSum = error;
       // reset the error sum to a sane level
       // Setting to current error ensures a smooth transition when the P term
       // decreases enough for the I term to start acting upon the controller
       // From that point the I term will build up as would be expected
-    }
-    else if (outputRampRate!=0 && !bounded(output, lastOutput-outputRampRate, lastOutput+outputRampRate) )
-    {
-      errorSum=error;
-    }
-    else if (maxIOutput!=0)
-    {
-      errorSum=constrain(errorSum+error, -maxError, maxError);
+    } else if (outputRampRate != 0
+        && !bounded(output, lastOutput - outputRampRate, lastOutput + outputRampRate)) {
+      errorSum = error;
+    } else if (maxIOutput != 0) {
+      errorSum = constrain(errorSum + error, -maxError, maxError);
       // In addition to output limiting directly, we also want to prevent I term
       // buildup, so restrict the error directly
-    }
-    else{
-      errorSum+=error;
+    } else {
+      errorSum += error;
     }
 
     // Restrict output to our specified output and ramp limits
-    if (outputRampRate!=0)
-    {
-      output=constrain(output, lastOutput-outputRampRate, lastOutput+outputRampRate);
+    if (outputRampRate != 0) {
+      output = constrain(output, lastOutput - outputRampRate, lastOutput + outputRampRate);
     }
-    if (minOutput!=maxOutput)
-    {
-      output=constrain(output, minOutput, maxOutput);
+    if (minOutput != maxOutput) {
+      output = constrain(output, minOutput, maxOutput);
     }
-    if (outputFilter!=0)
-    {
-      output=lastOutput*outputFilter+output*(1-outputFilter);
+    if (outputFilter != 0) {
+      output = lastOutput * outputFilter + output * (1 - outputFilter);
     }
 
     // Get a test printline with lots of details about the internal
@@ -381,7 +350,7 @@ public class PID
     // System.out.printf("Final output %5.2f [ %5.2f, %5.2f , %5.2f  ], eSum %.2f\n", output, Poutput, Ioutput, Doutput, errorSum );
     // System.out.printf("%5.2f\t%5.2f\t%5.2f\t%5.2f\n", output, Poutput, Ioutput, Doutput );
 
-    lastOutput=output;
+    lastOutput = output;
     return output;
   }
 
@@ -392,8 +361,7 @@ public class PID
    * Not typically useful, and use of parameter modes is suggested. <br>
    * @return calculated output value for driving the system
    */
-  public double getOutput()
-  {
+  public double getOutput() {
     return getOutput(lastActual, setpoint);
   }
 
@@ -405,8 +373,7 @@ public class PID
    * @param setpoint The target value for the system
    * @return calculated output value for driving the system
    */
-  public double getOutput(double actual)
-  {
+  public double getOutput(double actual) {
     return getOutput(actual, setpoint);
   }
 
@@ -417,10 +384,9 @@ public class PID
    * duration, and the controlled portion of the system may have changed due to
    * external forces.
    */
-  public void reset()
-  {
-    firstRun=true;
-    errorSum=0;
+  public void reset() {
+    firstRun = true;
+    errorSum = 0;
   }
 
   /**
@@ -433,9 +399,8 @@ public class PID
    *
    * @param rate, with units being the same as the output
    */
-  public void setOutputRampRate(double rate)
-  {
-    outputRampRate=rate;
+  public void setOutputRampRate(double rate) {
+    outputRampRate = rate;
   }
 
   /**
@@ -445,27 +410,24 @@ public class PID
    * during large setpoint adjustments. Increases lag and I term if range is too small.
    * @param range, with units being the same as the expected sensor range.
    */
-  public void setSetpointRange(double rangeLo, double rangeHi)
-  {
-    setpointRangeLo=rangeLo;
-    setpointRangeHi=rangeHi;
+  public void setSetpointRange(double rangeLo, double rangeHi) {
+    setpointRangeLo = rangeLo;
+    setpointRangeHi = rangeHi;
   }
 
   /**
    * Set the continous range for the PID error. ensures that the error wraps from 0 -> inputRange
    * @param range, with units being the same as the expected sensor range.
    */
-  public void setContinousInputRange(double range)
-  {
-    continousInputRange=range;
+  public void setContinousInputRange(double range) {
+    continousInputRange = range;
   }
 
   /**
    * Set the continous range on for the PID error loop
    * @param logic, boolean value for contious mode
    */
-  public void setContinous(boolean logic)
-  {
+  public void setContinous(boolean logic) {
     continous = logic;
   }
 
@@ -480,16 +442,13 @@ public class PID
    * <pre>output*(1-strength)*sum(0..n){output*strength^n}</pre> algorithm.
    * @param output valid between [0..1), meaning [current output only.. historical output only)
    */
-  public void setOutputFilter(double strength)
-  {
-    if (strength==0 || bounded(strength, 0, 1))
-    {
-      outputFilter=strength;
+  public void setOutputFilter(double strength) {
+    if (strength == 0 || bounded(strength, 0, 1)) {
+      outputFilter = strength;
     }
   }
 
-  public double getError()
-  {
+  public double getError() {
     return error;
   }
 
@@ -504,10 +463,13 @@ public class PID
    * @param max minimum value in range
    * @return Value if it's within provided range, min or max otherwise
    */
-  private double constrain(double value, double min, double max)
-  {
-    if (value > max) { return max;}
-    if (value < min) { return min;}
+  private double constrain(double value, double min, double max) {
+    if (value > max) {
+      return max;
+    }
+    if (value < min) {
+      return min;
+    }
     return value;
   }
 
@@ -518,33 +480,37 @@ public class PID
    * @param max Maximum value of range
    * @return true if value is within range, false otherwise
    */
-  private boolean bounded(double value, double min, double max)
-  {
+  private boolean bounded(double value, double min, double max) {
     // Note, this is an inclusive range. This is so tests like
     // `bounded(constrain(0, 0, 1), 0, 1)` will return false.
     // This is more helpful for determining edge-case behaviour
     // than <= is.
-    return (min<value) && (value<max);
+    return (min < value) && (value < max);
   }
 
   /**
    * To operate correctly, all PID parameters require the same sign
    * This should align with the {@literal}reversed value
    */
-  private void checkSigns()
-  {
-    if (reversed)
-    {  // all values should be below zero
-      if (P>0) P*=-1;
-      if (I>0) I*=-1;
-      if (D>0) D*=-1;
-      if (F>0) F*=-1;
-    }
-    else{  // all values should be above zero
-      if (P<0) P*=-1;
-      if (I<0) I*=-1;
-      if (D<0) D*=-1;
-      if (F<0) F*=-1;
+  private void checkSigns() {
+    if (reversed) { // all values should be below zero
+      if (P > 0)
+        P *= -1;
+      if (I > 0)
+        I *= -1;
+      if (D > 0)
+        D *= -1;
+      if (F > 0)
+        F *= -1;
+    } else { // all values should be above zero
+      if (P < 0)
+        P *= -1;
+      if (I < 0)
+        I *= -1;
+      if (D < 0)
+        D *= -1;
+      if (F < 0)
+        F *= -1;
     }
   }
 }

@@ -1,29 +1,26 @@
 package frc.robot.components;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants;
 
-public class DriveMotor
-{
+public class DriveMotor {
     private double currentRPM = 0.0;
     private double desiredRPM = 0.0;
 
-    private CANPIDController sparkPID;
+    private SparkMaxPIDController sparkPID;
     private CANSparkMax sparkMotor;
-    private CANEncoder sparkEncoder;
+    private RelativeEncoder sparkEncoder;
 
     /**
      * 
      * @param motorID of the Spark Max
      * @param motorIndex of the motor index
      */
-    public DriveMotor(int motorID, int motorIndex)
-    {
+    public DriveMotor(int motorID, int motorIndex) {
         sparkMotor = new CANSparkMax(motorID, MotorType.kBrushless);
         sparkPID = sparkMotor.getPIDController();
         sparkEncoder = sparkMotor.getEncoder();
@@ -44,18 +41,16 @@ public class DriveMotor
      * 
      * @param rpm desired RPMs of the motor shaft
      */
-    public void setDesiredRPM(double rpm)
-    {
+    public void setDesiredRPM(double rpm) {
         desiredRPM = rpm;
-        sparkPID.setReference(desiredRPM, ControlType.kDutyCycle);
+        sparkPID.setReference(desiredRPM, CANSparkMax.ControlType.kDutyCycle);
     }
 
     /**
      * 
      * @return motor shaft velocity in RPM
      */
-    public double getCurrentRPM()
-    {
+    public double getCurrentRPM() {
         currentRPM = sparkEncoder.getVelocity();
         return currentRPM;
     }

@@ -1,25 +1,21 @@
 package frc.robot.utilities;
 
-public class Utils
-{
+public class Utils {
     public static double map(final double value, final double input_min, final double input_max,
-            final double output_min, final double output_max)
-    {
+            final double output_min, final double output_max) {
         final double scaler = (output_max - output_min) / (input_max - input_min);
         final double value_scaled = ((value - input_min) * scaler) + output_min;
 
         return value_scaled;
     }
 
-    public static double magnitude(final double x, final double y)
-    {
+    public static double magnitude(final double x, final double y) {
         return Math.pow(Math.pow(x, 2) + Math.pow(y, 2), 0.5);
     }
 
     // convert cartisan joystic coords into angle -PI to PI
-    public static double angle(final double x, final double y)
-    {
-        return Math.atan2(y, x);  // returns -PI to PI
+    public static double angle(final double x, final double y) {
+        return Math.atan2(y, x); // returns -PI to PI
     }
 
     /**
@@ -28,8 +24,7 @@ public class Utils
      * @param v2 another vector in the form [theta, magnitude]
      * @return the vector sum, in the form [theta, magnitude]
      */
-    public static double[] addVectors(double[] v1, double[] v2)
-    {
+    public static double[] addVectors(double[] v1, double[] v2) {
         // Seperate the vectors into variables
         double vector1Angle = v1[0];
         double vector1Mag = v1[1];
@@ -58,21 +53,17 @@ public class Utils
      * @param angle angle to be normalized
      * @return angle in the range [0, 2PI)
      */
-    public static double normalizeAngle(double angle)
-    {
-        while (angle < 0)
-        {
+    public static double normalizeAngle(double angle) {
+        while (angle < 0) {
             angle += 2 * Math.PI;
         }
-        while (angle >= 2*Math.PI)
-        {
+        while (angle >= 2 * Math.PI) {
             angle -= 2 * Math.PI;
         }
         return angle;
     }
 
-    public static <X extends Comparable<X>> X max (X[] list)
-    {
+    public static <X extends Comparable<X>> X max(X[] list) {
         X max = list[0];
 
         for (X x : list)

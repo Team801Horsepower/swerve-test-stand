@@ -1,8 +1,8 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* Copyright (c) 2018 FIRST. All Rights Reserved. */
+/* Open Source Software - may be modified and shared by FRC teams. The code */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
+/* the project. */
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
@@ -17,31 +17,28 @@ import frc.robot.utilities.Utils;
 /**
  * Add your docs here.
  */
-public class Stand extends Subsystem
-{
+public class Stand extends Subsystem {
 
     private SwervePod pod = new SwervePod(Constants.DRIVE_POD_ID, Constants.TURN_POD_ID, 0);
 
     @Override
-    public void initDefaultCommand()
-    {
+    public void initDefaultCommand() {
         setDefaultCommand(new JoystickDrive());
     }
 
-    public void joystickDrive()
-    {
-      // Always call to process PID for turn motor
-      pod.processPod();
+    public void joystickDrive() {
+        // Always call to process PID for turn motor
+        pod.processPod();
 
 
-      //double x = Robot.m_oi.getDriverX();
+        //double x = Robot.m_oi.getDriverX();
         double x = Robot.io.getDriverLeftX();
         double y = Robot.io.getDriverLeftY();
 
         double speed = Utils.magnitude(x, y);
 
 
-       // double theta = Utils.angle(Robot.io.getDriverLeftX(), Robot.io.getDriverLeftY());
+        // double theta = Utils.angle(Robot.io.getDriverLeftX(), Robot.io.getDriverLeftY());
 
         //double mag = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) );
 
@@ -55,8 +52,7 @@ public class Stand extends Subsystem
     }
 
 
-    public double getAngle()
-    {
+    public double getAngle() {
         return pod.getCurrentAngle();
     }
 }

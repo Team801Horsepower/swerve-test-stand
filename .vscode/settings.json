@@ -1,6 +1,9 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
+  "java.format.comments.enabled": false,
+  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+  "java.format.settings.profile": "GoogleStyle",
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -13,5 +16,19 @@
     "**/.settings": true,
     "**/.factorypath": true,
     "**/*~": true
-  }
+  },
+  "java.test.config": [
+    {
+      "name": "WPIlibUnitTests",
+      "workingDirectory": "${workspaceFolder}/build/jni/release",
+      "vmargs": [
+        "-Djava.library.path=${workspaceFolder}/build/jni/release"
+      ],
+      "env": {
+        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
+        "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
+      }
+    },
+  ],
+  "java.test.defaultConfig": "WPIlibUnitTests"
 }

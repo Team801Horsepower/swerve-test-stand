@@ -7,23 +7,22 @@ public class RollingAverage {
   private int index = 0;
   private double[] samples;
 
-  public RollingAverage(int size)
-  {
+  public RollingAverage(int size) {
     this.size = size;
     samples = new double[size];
-    for (int i = 0; i < size; i++) samples[i] = 0d;
+    for (int i = 0; i < size; i++)
+      samples[i] = 0d;
   }
 
-  public void add(double x)
-  {
+  public void add(double x) {
     total -= samples[index];
     samples[index] = x;
     total += x;
-    if (++index == size) index = 0; // cheaper than modulus
+    if (++index == size)
+      index = 0; // cheaper than modulus
   }
 
-  public double getAverage()
-  {
+  public double getAverage() {
     double val = total / size;
     return val;
   }
