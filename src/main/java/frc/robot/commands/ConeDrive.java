@@ -7,11 +7,15 @@
 
 package frc.robot.commands;
 
+import org.photonvision.PhotonCamera;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class JoystickDrive extends Command {
-  public JoystickDrive() {
+public class ConeDrive extends Command {
+
+  private PhotonCamera camera;
+
+  public ConeDrive() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.s_stand);
@@ -20,14 +24,23 @@ public class JoystickDrive extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-
+    camera = new PhotonCamera("mmal_service_16.1");
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    System.out.println("Running JoystickDrive");
-    Robot.s_stand.joystickDrive();
+    Robot.s_stand.update();
+    System.out.println("Running ConeDrive");
+    var result = camera.getLatestResult();
+    boolean hasTargets = result.hasTargets();
+
+    if (hasTargets) {
+      System.out.println("hasTargets");
+      Robot.s_stand.drive(result.getBestTarget().getYaw(), 0.1);
+    } else {
+      System.out.println("!hasTargets");
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

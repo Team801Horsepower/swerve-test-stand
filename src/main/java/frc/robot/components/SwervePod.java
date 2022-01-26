@@ -13,7 +13,7 @@ public class SwervePod {
 
     // main process to keep updating values and PID processing
     public void processPod() {
-        // driveMotor.processDrive();  // Not currently needed because Sparc does PID work
+        // driveMotor.processDrive();  // Not currently needed because Spark does PID work
         turnMotor.processTurn();
     }
 

@@ -5,7 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-//import edu.wpi.first.wpilibj.CAN;
+// import edu.wpi.first.wpilibj.CAN;
 import frc.robot.Constants;
 import frc.robot.utilities.*;
 
@@ -36,7 +36,8 @@ public class TurnMotor {
 
     sparkMotor.setInverted(Constants.TURN_INVERT[motorIndex]);
     sparkMotor.setIdleMode(Constants.TURN_IDLEMODE[motorIndex]);
-    sparkMotor.setSmartCurrentLimit(Constants.TURN_MAX_CURRENT_STALL, Constants.TURN_MAX_CURRENT_RUN);
+    sparkMotor.setSmartCurrentLimit(Constants.TURN_MAX_CURRENT_STALL,
+        Constants.TURN_MAX_CURRENT_RUN);
 
     // create and initialize the PID for the heading
     anglePID = new PID(Constants.TURN_P, Constants.TURN_I, Constants.TURN_D);
@@ -70,7 +71,8 @@ public class TurnMotor {
     sparkMotor.set(vTheta);
 
     // diagnostic print. comment out of production code
-    System.out.printf("desiredAngle: , currentAngle: %.4f , %.4f , %.4f  \n", desiredAngle, currentAngle, vTheta);
+    // System.out.printf("desiredAngle: , currentAngle: %.4f , %.4f , %.4f  \n", desiredAngle,
+    //    currentAngle, vTheta);
   }
 
   // basic getter for angle.  Possible use for Dashboard

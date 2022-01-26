@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.commands.ConeDrive;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.components.SwervePod;
 import frc.robot.utilities.Utils;
@@ -23,13 +24,15 @@ public class Stand extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new JoystickDrive());
+        setDefaultCommand(new ConeDrive());
+    }
+
+    public void update() {
+        pod.processPod();
     }
 
     public void joystickDrive() {
-        // Always call to process PID for turn motor
-        pod.processPod();
-
+        update();
 
         //double x = Robot.m_oi.getDriverX();
         double x = Robot.io.getDriverLeftX();
@@ -51,6 +54,10 @@ public class Stand extends Subsystem {
         pod.setDesiredAngle(angle);
     }
 
+    public void drive(double angle, double speed) {
+        pod.setDesiredRPM(speed);
+        pod.setDesiredAngle(angle);
+    }
 
     public double getAngle() {
         return pod.getCurrentAngle();

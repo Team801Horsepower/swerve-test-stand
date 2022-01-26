@@ -34,7 +34,8 @@ public class DriveMotor {
 
         sparkMotor.setInverted(Constants.DRIVE_INVERT[motorIndex]);
         sparkMotor.setIdleMode(Constants.DRIVE_IDLEMODE[motorIndex]);
-        sparkMotor.setSmartCurrentLimit(Constants.DRIVE_MAX_CURRENT_STALL, Constants.DRIVE_MAX_CURRENT_RUN);
+        sparkMotor.setSmartCurrentLimit(Constants.DRIVE_MAX_CURRENT_STALL,
+                Constants.DRIVE_MAX_CURRENT_RUN);
     }
 
     /**
