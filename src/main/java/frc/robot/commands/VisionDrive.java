@@ -11,11 +11,11 @@ import org.photonvision.PhotonCamera;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class ConeDrive extends Command {
+public class VisionDrive extends Command {
 
   private PhotonCamera camera;
 
-  public ConeDrive() {
+  public VisionDrive() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.s_stand);
@@ -31,13 +31,15 @@ public class ConeDrive extends Command {
   @Override
   protected void execute() {
     Robot.s_stand.update();
-    System.out.println("Running ConeDrive");
+    //System.out.println("Running VisionDrive");
     var result = camera.getLatestResult();
     boolean hasTargets = result.hasTargets();
 
     if (hasTargets) {
-      System.out.println("hasTargets");
-      Robot.s_stand.drive(result.getBestTarget().getYaw(), 0.1);
+      //System.out.println("hasTargets");
+      System.out.println(-result.getBestTarget().getYaw());
+      //REMOVE *4.5 after calibration
+      Robot.s_stand.drive(-result.getBestTarget().getYaw()/180*Math.PI*4.5, 0.1);
     } else {
       System.out.println("!hasTargets");
     }

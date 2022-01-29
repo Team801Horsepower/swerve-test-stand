@@ -10,7 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.commands.ConeDrive;
+import frc.robot.commands.VisionDrive;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.components.SwervePod;
 import frc.robot.utilities.Utils;
@@ -24,7 +24,7 @@ public class Stand extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new ConeDrive());
+        setDefaultCommand(new VisionDrive());
     }
 
     public void update() {
