@@ -1,5 +1,7 @@
 package frc.robot.utilities;
 
+import edu.wpi.first.math.geometry.Pose2d;
+
 public class Utils {
     public static double map(final double value, final double input_min, final double input_max,
             final double output_min, final double output_max) {
@@ -13,13 +15,20 @@ public class Utils {
         return Math.pow(Math.pow(x, 2) + Math.pow(y, 2), 0.5);
     }
 
-    // convert cartisan joystic coords into angle -PI to PI
+    /**
+     * Convert Cartisan coords into angle from 0 to 2PI
+     * 
+     * @param x
+     * @param y
+     * @return an angle from 0 to 2PI
+     */
     public static double angle(final double x, final double y) {
-        return Math.atan2(y, x); // returns -PI to PI
+        return normalizeAngle(Math.atan2(y, x)); // returns 0 to 2PI
     }
 
     /**
      * A function that adds two polar vectors
+     * 
      * @param v1 a vector in the form [theta, magnitude]
      * @param v2 another vector in the form [theta, magnitude]
      * @return the vector sum, in the form [theta, magnitude]
@@ -50,6 +59,7 @@ public class Utils {
 
     /**
      * A function that normalizes an angle to the range [0, 2PI)
+     * 
      * @param angle angle to be normalized
      * @return angle in the range [0, 2PI)
      */
@@ -63,6 +73,9 @@ public class Utils {
         return angle;
     }
 
+    /**
+     * 
+     */
     public static <X extends Comparable<X>> X max(X[] list) {
         X max = list[0];
 
@@ -71,5 +84,26 @@ public class Utils {
                 max = x;
 
         return max;
+    }
+
+    /**
+     * Returns value limited to the range [lowerLimit, upperLimit]
+     * 
+     * @param val
+     * @param lowerLimit
+     * @param upperLimit
+     * @return value limited to the range [lowerLimit, upperLimit]
+     */
+    public static double limitRange(double val, double lowerLimit, double upperLimit) {
+        if (val > upperLimit)
+            return upperLimit;
+        if (val < lowerLimit)
+            return lowerLimit;
+        return val;
+    }
+
+    public static boolean almostEqual(Pose2d a, Pose2d b, double epsilon) {
+        return Math.abs(a.getX() - b.getY()) + Math.abs(a.getY() - b.getY())
+                + Math.abs(a.getRotation().getRadians() - b.getRotation().getRadians()) < epsilon;
     }
 }
