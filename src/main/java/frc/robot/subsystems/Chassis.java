@@ -4,10 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-// import java.util.Map;
-import frc.robot.components.DriveMotor;
 import frc.robot.components.SwerveModule;
-import frc.robot.components.TurnMotor;
+import frc.robot.components.SwerveModule2020;
 
 /**
  * Subsystem to control the entire drive base
@@ -23,8 +21,7 @@ public class Chassis extends SubsystemBase {
     public Chassis() {
         super();
 
-        module = new SwerveModule(new DriveMotor(Constants.DRIVE_ID, 1),
-                        new TurnMotor(Constants.TURN_ID, 1), Constants.DRIVE_METERS_PER_RADIAN);
+        module = new SwerveModule2020(Constants.DRIVE_ID, Constants.TURN_ID);;
     }
 
     /**
