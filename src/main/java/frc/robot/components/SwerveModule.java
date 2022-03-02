@@ -24,7 +24,7 @@ public class SwerveModule {
      * @param driveMotor A motor which implements the `SpeedMotor` interface.
      * @param turnMotor A motor which implements the `TurnMotor` interface.
      * @param metersPerRad A conversion constant with the units meters/rad which converts from
-     *        radians to meters. (Depends on gear ratios, wheel size, etc.)
+     *        radians to meters. (Depends wheel size)
      */
     public SwerveModule(SpeedMotor driveMotor, AngleMotor turnMotor, double metersPerRad) {
         this.DRIVE_MOTOR = driveMotor;

@@ -16,16 +16,16 @@ public interface SpeedMotor {
     public default void periodic() {}
 
     /**
-     * Requests the motor rotate at the desired speed.
+     * Requests the output shaft rotate at the desired speed.
      * 
      * @param speed The speed to rotate in rad/s.
      */
     public void setDesiredSpeed(double speed);
 
     /**
-     * Returns the current speed of the motor.
+     * Returns the current speed of the output shaft.
      * 
-     * @return The speed the motor is running at in rad/s.
+     * @return The speed the output shaft is running at in rad/s.
      * @apiNote This is not necessarily the last desired speed.
      */
     public double getCurrentSpeed();

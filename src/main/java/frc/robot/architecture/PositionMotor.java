@@ -16,16 +16,16 @@ public interface PositionMotor {
     public default void periodic() {}
 
     /**
-     * Requests the motor turn to the desired position.
+     * Requests the output shaft turn to the desired position.
      * 
-     * @param position The position to turn to in radians.
+     * @param position The output shaft to turn to in radians.
      */
     public void setDesiredPosition(double position);
 
     /**
-     * Returns the current position of the motor.
+     * Returns the current position of the output shaft.
      * 
-     * @return The current position of the motor in radians.
+     * @return The current position of the output shaft in radians.
      * @apiNote This is not necessarily the last desired position.
      */
     public double getCurrentPosition();

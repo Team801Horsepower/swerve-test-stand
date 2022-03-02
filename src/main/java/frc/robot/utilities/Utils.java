@@ -64,11 +64,9 @@ public class Utils {
      * @return angle in the range [0, 2PI)
      */
     public static double normalizeAngle(double angle) {
-        while (angle < 0) {
+        angle %= 2 * Math.PI;
+        if (angle < 0) {
             angle += 2 * Math.PI;
-        }
-        while (angle >= 2 * Math.PI) {
-            angle -= 2 * Math.PI;
         }
         return angle;
     }

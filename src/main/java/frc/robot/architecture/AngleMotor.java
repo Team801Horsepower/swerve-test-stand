@@ -1,5 +1,7 @@
 package frc.robot.architecture;
 
+import frc.robot.utilities.Utils;
+
 /**
  * Defines the methods for motors which can turn to face a specific angle.
  */
@@ -14,22 +16,24 @@ public interface AngleMotor {
             
         @Override
         public void setDesiredAngle(double angle) {
-            double currentHeading = positionMotor.getCurrentPosition() % 1;
-            double desiredHeading = angle / (2 * Math.PI);
+            double currentHeading = Utils.normalizeAngle(positionMotor.getCurrentPosition());
+            double desiredHeading = Utils.normalizeAngle(angle);
             double desiredPosition = positionMotor.getCurrentPosition();
-            if (Math.abs(currentHeading - desiredHeading) < 0.5) {
+            if (Math.abs(currentHeading - desiredHeading) < Math.PI) {
                 desiredPosition += desiredHeading - currentHeading;
-            } else if (currentHeading > 0.5) {
-                desiredPosition += 1 + desiredHeading - currentHeading;
+            } else if (currentHeading > Math.PI) {
+                desiredPosition += (2 * Math.PI) + desiredHeading - currentHeading;
             } else {
-                desiredHeading += -1 + desiredHeading - currentHeading;
+                desiredPosition += -(2 * Math.PI) + desiredHeading - currentHeading;
             }
+            System.out.println("HEADING: " + desiredHeading);
+            System.out.println("POSITION: " + desiredPosition);
             positionMotor.setDesiredPosition(desiredPosition);                
         }
 
         @Override
         public double getCurrentAngle() {
-            return (positionMotor.getCurrentPosition() * 2 * Math.PI) % (2 * Math.PI);
+            return positionMotor.getCurrentPosition() % (2 * Math.PI);
         }
     }
 
@@ -44,16 +48,16 @@ public interface AngleMotor {
     public default void periodic() {}
 
     /**
-     * Requests the motor face the desired angle.
+     * Requests the output shaft face the desired angle.
      * 
      * @param angle The angle to face in radians.
      */
     public void setDesiredAngle(double angle);
 
     /**
-     * Returns the current heading of the motor.
+     * Returns the current heading of the output shaft.
      * 
-     * @return The current angle the motor is facing.
+     * @return The current angle the output shaft is facing.
      * @apiNote This is not necessarily the last desired angle.
      */
     public double getCurrentAngle();
