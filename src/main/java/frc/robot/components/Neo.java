@@ -27,7 +27,6 @@ public class Neo implements SpeedMotor, PositionMotor, Sendable {
 
     private double gearRatio = 1;
     private int speedPid = 0, positionPid = 1;
-    private int currentPid = 0;
 
     /**
      * Creates an instance of Neo which refers to a Neo or a Neo550 attached to a SparkMax.
@@ -58,16 +57,18 @@ public class Neo implements SpeedMotor, PositionMotor, Sendable {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("PIDController");
+        builder.setSmartDashboardType("SparkMax");
         builder.addBooleanProperty("inverted", () -> { return CONTROLLER.getInverted(); }, (value) -> { CONTROLLER.setInverted(value); });
         builder.addBooleanProperty("brake", () -> { return CONTROLLER.getIdleMode() == IdleMode.kBrake; }, (value) -> { CONTROLLER.setIdleMode(value ? IdleMode.kBrake : IdleMode.kCoast); });
 
-        builder.addDoubleProperty("slot", () -> { return currentPid; }, (value) -> { currentPid = (int) value; });
-        builder.addDoubleProperty("p", () -> { return PID.getP(currentPid); }, (value) -> { PID.setP(value, currentPid); });
-        builder.addDoubleProperty("i", () -> { return PID.getI(currentPid); }, (value) -> { PID.setI(value, currentPid); });
-        builder.addDoubleProperty("d", () -> { return PID.getD(currentPid); }, (value) -> { PID.setD(value, currentPid); });
-        builder.addDoubleProperty("ff", () -> { return PID.getFF(currentPid); }, (value) -> { PID.setFF(value, currentPid); });
-        builder.addDoubleProperty("iz", () -> { return PID.getIZone(currentPid); }, (value) -> { PID.setIZone(value, currentPid); });
+        for (int i = 0; i < 4; i++) {
+            final int t = i;
+            builder.addDoubleProperty("p_" + t, () -> { return PID.getP(t); }, (value) -> { PID.setP(value, t); });
+            builder.addDoubleProperty("i_" + t, () -> { return PID.getI(t); }, (value) -> { PID.setI(value, t); });
+            builder.addDoubleProperty("d_" + t, () -> { return PID.getD(t); }, (value) -> { PID.setD(value, t); });
+            builder.addDoubleProperty("ff_" + t, () -> { return PID.getFF(t); }, (value) -> { PID.setFF(value, t); });
+            builder.addDoubleProperty("iz_" + t, () -> { return PID.getIZone(t); }, (value) -> { PID.setIZone(value, t); });
+        }
     }
 
     protected void setDesiredSpeed(double speed, double maxSpeed) {
