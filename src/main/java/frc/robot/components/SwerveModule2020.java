@@ -1,8 +1,6 @@
 package frc.robot.components;
 
 import com.revrobotics.CANSparkMax.IdleMode;
-import frc.robot.architecture.AngleMotor;
-import frc.robot.architecture.AngleMotor.WrappedPositionMotor;
 
 public class SwerveModule2020 extends SwerveModule {
 
@@ -12,14 +10,14 @@ public class SwerveModule2020 extends SwerveModule {
     public SwerveModule2020(int driveCanId, int turnCanId) {
         super(
             new Neo(driveCanId),
-            AngleMotor.fromPositionMotor(new Neo550(turnCanId)),
+            new Neo550(turnCanId),
             0.31918 / (2 * Math.PI)
         );
 
         // Set up the drive motor
         DRIVE_MOTOR = (Neo) super.DRIVE_MOTOR;
         int speedPid = DRIVE_MOTOR.getSpeedPid();
-        DRIVE_MOTOR.PID.setP(0.0005, speedPid);
+        DRIVE_MOTOR.PID.setP(0.005, speedPid);
         DRIVE_MOTOR.PID.setI(0.0, speedPid);
         DRIVE_MOTOR.PID.setD(0.0, speedPid);
         DRIVE_MOTOR.PID.setFF(0.0, speedPid);
@@ -33,10 +31,10 @@ public class SwerveModule2020 extends SwerveModule {
         DRIVE_MOTOR.CONTROLLER.setSmartCurrentLimit(40, 30);
 
         // Make settings persistent
-        DRIVE_MOTOR.CONTROLLER.burnFlash();
+        // DRIVE_MOTOR.CONTROLLER.burnFlash();
 
         // Set up the Turn Motor
-        TURN_MOTOR = (Neo550) ((WrappedPositionMotor) super.TURN_MOTOR).positionMotor;
+        TURN_MOTOR = (Neo550) super.TURN_MOTOR;
         int positionPid = TURN_MOTOR.getPositionPid();
         TURN_MOTOR.PID.setP(0.5, positionPid);
         TURN_MOTOR.PID.setI(0.004, positionPid);
@@ -45,13 +43,19 @@ public class SwerveModule2020 extends SwerveModule {
         TURN_MOTOR.PID.setIMaxAccum(0.5, positionPid);
         TURN_MOTOR.PID.setOutputRange(-1.0, 1.0);
         
-        TURN_MOTOR.setGearRatio(1 / 60);
+        TURN_MOTOR.setGearRatio(1.0 / 60.0);
 
+        TURN_MOTOR.CONTROLLER.setInverted(true);
         TURN_MOTOR.CONTROLLER.setIdleMode(IdleMode.kCoast); // TODO: Switch back to kBrake
         TURN_MOTOR.CONTROLLER.setSmartCurrentLimit(30, 20);
 
         // Make settings persistent
-        TURN_MOTOR.CONTROLLER.burnFlash();
+        // TURN_MOTOR.CONTROLLER.burnFlash();
     }
-   
+
+    @Override
+    public void resetZero() {
+        TURN_MOTOR.setPosition(0.0);
+    }
+
 }

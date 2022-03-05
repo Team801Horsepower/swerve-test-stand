@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.architecture.PositionMotor;
 import frc.robot.architecture.SpeedMotor;
 
@@ -22,10 +21,12 @@ public class Neo implements SpeedMotor, PositionMotor, Sendable {
 
     public final int CAN_ID;
     public final CANSparkMax CONTROLLER;
-    public final RelativeEncoder ENCODER;
     public final SparkMaxPIDController PID;
 
-    private double gearRatio = 1;
+    /** Exposed for advanced controls, for most applications do not mess with this. */
+    private final RelativeEncoder ENCODER;
+    
+    private double gearRatio = 1.0;
     private int speedPid = 0, positionPid = 1;
 
     /**
@@ -42,15 +43,10 @@ public class Neo implements SpeedMotor, PositionMotor, Sendable {
         PID = CONTROLLER.getPIDController();
 
         CONTROLLER.setSmartCurrentLimit(40);
-
-        SendableRegistry.addLW(this, "Neo", canId);
     }
 
     @Override
-    public void init() {
-        // Zero the encoder on init instead of startup.
-        ENCODER.setPosition(0.0);
-    }
+    public void init() {}
 
     @Override
     public void periodic() {}
@@ -72,10 +68,10 @@ public class Neo implements SpeedMotor, PositionMotor, Sendable {
     }
 
     protected void setDesiredSpeed(double speed, double maxSpeed) {
-        if (speed / ENCODER.getPositionConversionFactor() > maxSpeed) {
-            System.err.println("Tried to exceed max speed: " + speed / ENCODER.getPositionConversionFactor() + "RPM (max is "
+        if (speed / ENCODER.getVelocityConversionFactor() > maxSpeed) {
+            System.err.println("Tried to exceed max speed: " + speed / ENCODER.getVelocityConversionFactor() + "RPM (max is "
                     + maxSpeed + "RPM)");
-            speed = maxSpeed * ENCODER.getPositionConversionFactor();
+            speed = maxSpeed * ENCODER.getVelocityConversionFactor();
         }
         PID.setReference(speed, ControlType.kVelocity, speedPid);
     }
@@ -128,6 +124,10 @@ public class Neo implements SpeedMotor, PositionMotor, Sendable {
         ENCODER.setPositionConversionFactor(ENCODER.getPositionConversionFactor() / this.gearRatio * gearRatio);
         ENCODER.setVelocityConversionFactor(ENCODER.getVelocityConversionFactor() / this.gearRatio * gearRatio);
         this.gearRatio = gearRatio;
+    }
+
+    public void setPosition(double newPosition) {
+        ENCODER.setPosition(newPosition);
     }
     
 }

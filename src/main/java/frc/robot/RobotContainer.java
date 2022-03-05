@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.Reset;
 import frc.robot.commands.RobotDriveWithJoysticks;
 import frc.robot.subsystems.Chassis;
 
@@ -20,14 +21,17 @@ import frc.robot.subsystems.Chassis;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    public static final IO io = new IO();
 
+    public static RobotContainer INSTANCE;
+    public static final IO io = new IO();
     public static final Chassis chassis = new Chassis();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        assert INSTANCE == null;
+        INSTANCE = this;
         chassis.setDefaultCommand(new RobotDriveWithJoysticks());
         // Set the default commands for each subsystem
         // Configure the button bindings
@@ -44,17 +48,12 @@ public class RobotContainer {
 
     }
 
-    /** Reinitializes all the subsystems without a reboot */
-    public void reset() {
-        chassis.init();
-    }
-
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new RobotDriveWithJoysticks();
+        return new Reset();
     }
 }

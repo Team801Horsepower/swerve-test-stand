@@ -2,16 +2,16 @@ package frc.robot.components;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.architecture.AngleMotor;
+import frc.robot.architecture.PositionMotor;
 import frc.robot.architecture.SpeedMotor;
 
 /** A class which implements the boilerplate code for running a typical swerve module. */
-public class SwerveModule {
+public abstract class SwerveModule {
 
     protected final double METERS_PER_RAD;
 
     protected final SpeedMotor DRIVE_MOTOR;
-    protected final AngleMotor TURN_MOTOR;
+    protected final PositionMotor TURN_MOTOR;
 
     private double lastAngle;
     private boolean flipFlag = false;
@@ -26,7 +26,7 @@ public class SwerveModule {
      * @param metersPerRad A conversion constant with the units meters/rad which converts from
      *        radians to meters. (Depends wheel size)
      */
-    public SwerveModule(SpeedMotor driveMotor, AngleMotor turnMotor, double metersPerRad) {
+    public SwerveModule(SpeedMotor driveMotor, PositionMotor turnMotor, double metersPerRad) {
         this.DRIVE_MOTOR = driveMotor;
         this.TURN_MOTOR = turnMotor;
         this.METERS_PER_RAD = metersPerRad;
@@ -97,4 +97,6 @@ public class SwerveModule {
         state.speedMetersPerSecond = DRIVE_MOTOR.getCurrentSpeed() * METERS_PER_RAD;
         return state;
     }
+
+    public abstract void resetZero();
 }

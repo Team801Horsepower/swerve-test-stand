@@ -3,7 +3,7 @@ package frc.robot.architecture;
 /**
  * Defines the methods for motors which can rotate at a specific rate.
  */
-public interface SpeedMotor {
+public interface SpeedMotor extends SpeedEncoder {
 
     /**
      * Performs any required initialization. (ex. zero the encoder)
@@ -22,11 +22,4 @@ public interface SpeedMotor {
      */
     public void setDesiredSpeed(double speed);
 
-    /**
-     * Returns the current speed of the output shaft.
-     * 
-     * @return The speed the output shaft is running at in rad/s.
-     * @apiNote This is not necessarily the last desired speed.
-     */
-    public double getCurrentSpeed();
 }
