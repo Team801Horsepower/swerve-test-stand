@@ -24,11 +24,13 @@ public class Stand extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new VisionDrive());
+        setDefaultCommand(new JoystickDrive());
     }
 
     public void update() {
         pod.processPod();
+        double currentAngle = pod.getCurrentAngle();
+        System.out.println("current angle: " + currentAngle);
     }
 
     public void joystickDrive() {
@@ -49,7 +51,12 @@ public class Stand extends Subsystem {
         //System.out.println(theta);
         pod.setDesiredRPM(speed);
 
-        double angle = Math.atan2(y, x);
+        double angle;
+        if (x == 0.0 && y == 0.0) {
+            angle = 0.0;
+        } else {
+            angle = Math.atan2(y, x);
+        }
 
         pod.setDesiredAngle(angle);
     }
